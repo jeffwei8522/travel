@@ -1,0 +1,167 @@
+[
+  {
+    "id": "wanpi-world",
+    "name": "頑皮世界",
+    "name_en": "Wanpi World Safari Zoo",
+    "lat": 23.2306,
+    "lng": 120.1852,
+    "district": "學甲區",
+    "type": "attraction",
+    "icon": "paw",
+    "note": "野生動物園，適合半天行程"
+  },
+  {
+    "id": "kapok-road",
+    "name": "林初埤木棉花道",
+    "name_en": "Linchupi Kapok Flower Road",
+    "lat": 23.3389,
+    "lng": 120.3867,
+    "district": "白河區",
+    "type": "attraction",
+    "icon": "tree",
+    "note": "花期約 3 月中～4 月初，可能接近尾聲"
+  },
+  {
+    "id": "fairy-lake-farm",
+    "name": "仙湖農場",
+    "name_en": "Fairy Lake Farm",
+    "lat": 23.2596,
+    "lng": 120.4816,
+    "district": "東山區",
+    "type": "attraction",
+    "icon": "mountain-sun",
+    "note": "山區農場，可住宿或純參觀，車程較遠"
+  },
+  {
+    "id": "qigu-salt-mountain",
+    "name": "七股鹽山",
+    "name_en": "Qigu Salt Mountain",
+    "lat": 23.1574,
+    "lng": 120.1096,
+    "district": "七股區",
+    "type": "attraction",
+    "icon": "mountain",
+    "note": "台灣鹽業博物館旁，免費爬鹽山"
+  },
+  {
+    "id": "dingtou-sandbar",
+    "name": "頂頭額沙洲",
+    "name_en": "Dingtou'e Sandbar",
+    "lat": 23.1177,
+    "lng": 120.0536,
+    "district": "七股區",
+    "type": "attraction",
+    "icon": "umbrella-beach",
+    "note": "台灣版撒哈拉沙漠，偏遠但壯觀"
+  },
+  {
+    "id": "yuguang-island",
+    "name": "漁光島",
+    "name_en": "Yuguang Island",
+    "lat": 22.9786,
+    "lng": 120.1594,
+    "district": "安平區",
+    "type": "attraction",
+    "icon": "water",
+    "note": "安平南側小島，沙灘夕陽"
+  },
+  {
+    "id": "sunset-platform",
+    "name": "觀夕平台",
+    "name_en": "Sunset Viewing Platform",
+    "lat": 22.9959,
+    "lng": 120.1530,
+    "district": "安平區",
+    "type": "attraction",
+    "icon": "sun",
+    "note": "看夕陽的經典地點"
+  },
+  {
+    "id": "ninao",
+    "name": "蜷尾家",
+    "name_en": "Ninao",
+    "lat": 22.9921,
+    "lng": 120.1964,
+    "district": "中西區",
+    "type": "food",
+    "icon": "ice-cream",
+    "note": "正興街人氣霜淇淋"
+  },
+  {
+    "id": "sangwon-shop",
+    "name": "桑原商店（又又美）",
+    "name_en": "Sangwon Shop",
+    "lat": 22.9930,
+    "lng": 120.2030,
+    "district": "中西區",
+    "type": "food",
+    "icon": "store",
+    "note": "Hannah 指定"
+  },
+  {
+    "id": "garden-night-market",
+    "name": "花園夜市",
+    "name_en": "Garden Night Market",
+    "lat": 23.0000,
+    "lng": 120.1945,
+    "district": "北區",
+    "type": "food",
+    "icon": "utensils",
+    "note": "週四/六/日營業"
+  },
+  {
+    "id": "gold-coast",
+    "name": "黃金海岸",
+    "name_en": "Gold Coast",
+    "lat": 22.9347,
+    "lng": 120.1868,
+    "district": "南區",
+    "type": "attraction",
+    "icon": "person-swimming",
+    "note": "長沙灘，適合散步"
+  },
+  {
+    "id": "qipao-photo",
+    "name": "拍旗袍",
+    "name_en": "Qipao Photo Spot",
+    "lat": 22.9906,
+    "lng": 120.2040,
+    "district": "中西區",
+    "type": "activity",
+    "icon": "camera",
+    "note": "孔廟/府中街一帶，旗袍體驗拍照"
+  },
+  {
+    "id": "cafe",
+    "name": "文青咖啡廳",
+    "name_en": "Indie Coffee Shop",
+    "lat": 22.9935,
+    "lng": 120.1976,
+    "district": "中西區",
+    "type": "food",
+    "icon": "mug-hot",
+    "note": "神農街/正興街一帶"
+  },
+  {
+    "id": "dandan",
+    "name": "丹丹漢堡",
+    "name_en": "Dan Dan Hamburger",
+    "lat": 22.9988,
+    "lng": 120.2120,
+    "district": "東區",
+    "type": "food",
+    "icon": "burger",
+    "note": "南部限定速食，必吃"
+  },
+  {
+    "id": "beef-soup",
+    "name": "牛肉湯（每天）",
+    "name_en": "Tainan Beef Soup",
+    "lat": 22.9970,
+    "lng": 120.2080,
+    "district": "中西區",
+    "type": "food",
+    "icon": "bowl-food",
+    "note": "台南名物，每天早餐都要喝"
+  }
+]

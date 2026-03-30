@@ -1,0 +1,22 @@
+{
+  "name": "2026 台南小旅行 — Jeff & Hannah",
+  "short_name": "台南旅行",
+  "description": "4/3~4/6 台南行程地圖與規劃",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#fff0f5",
+  "theme_color": "#ffafbd",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

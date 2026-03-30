@@ -117,7 +117,19 @@
     "type": "food",
     "icon": "utensils",
     "note": "週四/六/日營業",
-    "day": [2, 3]
+    "day": [2]
+  },
+  {
+    "id": "wusheng-night-market",
+    "name": "武聖夜市",
+    "name_en": "Wusheng Night Market",
+    "lat": 23.0020,
+    "lng": 120.1912,
+    "district": "中西區",
+    "type": "food",
+    "icon": "utensils",
+    "note": "週三/六營業・離湖美最近的夜市",
+    "day": [2]
   },
   {
     "id": "dadong-night-market",

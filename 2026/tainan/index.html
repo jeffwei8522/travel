@@ -73,6 +73,16 @@
     .place-popup h3 { color: #d63384; margin-bottom: 4px; font-size: 1rem; }
     .place-popup .district { color: #888; font-size: 0.85rem; }
     .place-popup .note { margin-top: 6px; font-size: 0.9rem; }
+    .place-popup .day-tags { margin-top: 6px; }
+    .place-popup .day-tag {
+      display: inline-block;
+      padding: 1px 8px;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      color: #fff;
+      margin-right: 4px;
+    }
     .place-popup .type-badge {
       display: inline-block;
       padding: 1px 8px;
@@ -82,45 +92,118 @@
       color: #fff;
       margin-top: 4px;
     }
+
+    /* Itinerary panel */
+    .itinerary-panel {
+      position: absolute;
+      bottom: 20px;
+      left: 10px;
+      z-index: 1000;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+      padding: 14px 16px;
+      max-width: 320px;
+      font-size: 0.85rem;
+      display: none;
+    }
+    .itinerary-panel h4 { color: #d63384; margin-bottom: 8px; }
+    .itinerary-panel .itin-item {
+      padding: 4px 0;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .itinerary-panel .itin-item:last-child { border-bottom: none; }
+    .itin-time { font-weight: bold; color: #888; min-width: 50px; }
   </style>
 </head>
 <body>
   <div class="topbar">
     <div>
       <h1>2026 台南小旅行</h1>
-      <span class="subtitle">4/4 (六) ~ 4/6 (一) ・ Jeff & Hannah</span>
+      <span class="subtitle">4/3 (五) ~ 4/6 (一) ・ Jeff & Hannah</span>
     </div>
     <div class="day-filter">
       <button class="day-btn active" data-day="all">全部</button>
-      <button class="day-btn" data-day="1">Day 1</button>
-      <button class="day-btn" data-day="2">Day 2</button>
-      <button class="day-btn" data-day="3">Day 3</button>
+      <button class="day-btn" data-day="1" data-color="#e74c3c">Fri 抵達</button>
+      <button class="day-btn" data-day="2" data-color="#3498db">Sat 海岸</button>
+      <button class="day-btn" data-day="3" data-color="#2ecc71">Sun 市區</button>
+      <button class="day-btn" data-day="4" data-color="#f39c12">Mon 北上</button>
     </div>
   </div>
   <div id="map"></div>
+  <div class="itinerary-panel" id="itinerary-panel"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     // --- Config ---
     const VISITED_DISTRICTS = [
-      '學甲區', '白河區', '東山區', '七股區',
+      '學甲區', '七股區',
       '安平區', '中西區', '北區', '南區', '東區',
       '安平區(海)'
     ];
 
+    const DAY_COLORS = {
+      1: '#e74c3c',
+      2: '#3498db',
+      3: '#2ecc71',
+      4: '#f39c12'
+    };
+
+    const DAY_LABELS = {
+      1: 'Fri 4/3',
+      2: 'Sat 4/4',
+      3: 'Sun 4/5',
+      4: 'Mon 4/6'
+    };
+
+    const DAY_ITINERARY = {
+      1: [
+        { time: '14:00', text: '新竹出發' },
+        { time: '17:00', text: '抵達台南・Check-in 湖美' },
+        { time: '18:00', text: '丹丹漢堡晚餐' },
+        { time: '19:30', text: '大東夜市（週五）' }
+      ],
+      2: [
+        { time: '07:00', text: '牛肉湯早餐' },
+        { time: '09:00', text: '七股鹽山' },
+        { time: '11:00', text: '頂頭額沙洲' },
+        { time: '14:00', text: '黃金海岸' },
+        { time: '16:30', text: '漁光島 / 觀夕平台看日落' },
+        { time: '19:00', text: '花園夜市（週六）' }
+      ],
+      3: [
+        { time: '07:00', text: '牛肉湯早餐' },
+        { time: '09:30', text: '拍旗袍（孔廟一帶）' },
+        { time: '12:00', text: '文青咖啡廳・午餐' },
+        { time: '14:00', text: '蜷尾家・正興街' },
+        { time: '15:00', text: '桑原商店（又又美）' },
+        { time: '18:00', text: '花園夜市（週日）' }
+      ],
+      4: [
+        { time: '07:00', text: '牛肉湯早餐' },
+        { time: '09:00', text: 'Check-out' },
+        { time: '10:00', text: '頑皮世界（北上順路）' },
+        { time: '14:00', text: '開車回新竹' }
+      ]
+    };
+
     const TYPE_COLORS = {
+      hotel:      '#1a1a2e',
       attraction: '#d63384',
       food:       '#ff8c00',
       activity:   '#6c5ce7'
     };
 
     const TYPE_LABELS = {
+      hotel:      '住宿',
       attraction: '景點',
       food:       '美食',
       activity:   '體驗'
     };
 
-    // District polygon styles
     const VISITED_STYLE = {
       fillColor: '#ffafbd',
       fillOpacity: 0.35,
@@ -129,13 +212,13 @@
     };
     const UNVISITED_STYLE = {
       fillColor: '#e0e0e0',
-      fillOpacity: 0.2,
-      color: '#999',
+      fillOpacity: 0.15,
+      color: '#bbb',
       weight: 1
     };
 
     // --- Map init ---
-    const map = L.map('map', { zoomControl: true }).setView([23.05, 120.22], 11);
+    const map = L.map('map', { zoomControl: true }).setView([23.00, 120.18], 12);
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; OpenStreetMap &copy; CARTO',
@@ -143,7 +226,7 @@
     }).addTo(map);
 
     // --- Load data ---
-    let districtLayer, markers = [];
+    let districtLayer, allMarkers = [], routeLines = [];
 
     Promise.all([
       fetch('data/districts.geojson').then(r => r.json()),
@@ -156,19 +239,22 @@
           return VISITED_DISTRICTS.includes(name) ? VISITED_STYLE : UNVISITED_STYLE;
         },
         onEachFeature: (feature, layer) => {
-          const name = feature.properties.TOWNNAME;
-          layer.bindTooltip(name, {
-            sticky: true,
-            className: 'district-tooltip',
-            direction: 'center'
+          layer.bindTooltip(feature.properties.TOWNNAME, {
+            sticky: true, direction: 'center'
           });
         }
       }).addTo(map);
 
       // Draw markers
       places.forEach(place => {
+        const isHotel = place.type === 'hotel';
         const color = TYPE_COLORS[place.type] || '#333';
+        const size = isHotel ? 40 : 32;
         const badge = TYPE_LABELS[place.type] || place.type;
+
+        const dayTags = (place.day || []).map(d =>
+          `<span class="day-tag" style="background:${DAY_COLORS[d]}">${DAY_LABELS[d]}</span>`
+        ).join('');
 
         const marker = L.marker([place.lat, place.lng], {
           icon: L.divIcon({
@@ -176,17 +262,19 @@
             html: `<div style="
               background: ${color};
               color: #fff;
-              width: 32px; height: 32px;
+              width: ${size}px; height: ${size}px;
               border-radius: 50%;
               display: flex; align-items: center; justify-content: center;
-              box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-              border: 2px solid #fff;
-              font-size: 14px;
+              box-shadow: 0 2px 8px rgba(0,0,0,${isHotel ? 0.5 : 0.3});
+              border: ${isHotel ? 3 : 2}px solid #fff;
+              font-size: ${isHotel ? 18 : 14}px;
+              ${isHotel ? 'animation: pulse 2s infinite;' : ''}
             "><i class="fa-solid fa-${place.icon}"></i></div>`,
-            iconSize: [32, 32],
-            iconAnchor: [16, 16],
-            popupAnchor: [0, -18]
-          })
+            iconSize: [size, size],
+            iconAnchor: [size/2, size/2],
+            popupAnchor: [0, -size/2]
+          }),
+          zIndexOffset: isHotel ? 1000 : 0
         });
 
         marker.bindPopup(`
@@ -195,27 +283,98 @@
             <div class="district"><i class="fa-solid fa-location-dot"></i> ${place.district}</div>
             <span class="type-badge" style="background:${color}">${badge}</span>
             <div class="note">${place.note}</div>
+            <div class="day-tags">${dayTags}</div>
           </div>
         `, { maxWidth: 280 });
 
         marker.placeData = place;
         marker.addTo(map);
-        markers.push(marker);
+        allMarkers.push(marker);
       });
 
-      // Fit bounds to all markers
-      if (markers.length) {
-        const group = L.featureGroup(markers);
-        map.fitBounds(group.getBounds().pad(0.1));
+      // Fit bounds
+      if (allMarkers.length) {
+        map.fitBounds(L.featureGroup(allMarkers).getBounds().pad(0.1));
+      }
+
+      // Build route lines for each day
+      for (const [day, color] of Object.entries(DAY_COLORS)) {
+        const dayNum = parseInt(day);
+        const dayPlaces = places.filter(p => p.day && p.day.includes(dayNum) && p.type !== 'hotel');
+        if (dayPlaces.length < 2) continue;
+
+        // Add hotel as start/end
+        const hotel = places.find(p => p.type === 'hotel');
+        const coords = [
+          [hotel.lat, hotel.lng],
+          ...dayPlaces.map(p => [p.lat, p.lng]),
+          [hotel.lat, hotel.lng]
+        ];
+
+        const line = L.polyline(coords, {
+          color: color,
+          weight: 3,
+          opacity: 0.6,
+          dashArray: '8, 8'
+        });
+        line.dayNum = dayNum;
+        routeLines.push(line);
       }
     });
 
-    // --- Day filter (placeholder - will connect to itinerary data later) ---
+    // --- Day filter ---
+    const panel = document.getElementById('itinerary-panel');
+
+    function filterDay(day) {
+      // Show/hide markers
+      allMarkers.forEach(m => {
+        const place = m.placeData;
+        if (day === 'all' || place.type === 'hotel' || (place.day && place.day.includes(parseInt(day)))) {
+          m.setOpacity(1);
+          if (m.getElement()) m.getElement().style.pointerEvents = 'auto';
+        } else {
+          m.setOpacity(0.2);
+          if (m.getElement()) m.getElement().style.pointerEvents = 'none';
+        }
+      });
+
+      // Show/hide route lines
+      routeLines.forEach(line => {
+        if (day === 'all' || line.dayNum === parseInt(day)) {
+          line.addTo(map);
+          if (day !== 'all') line.setStyle({ opacity: 0.8, weight: 4 });
+          else line.setStyle({ opacity: 0.4, weight: 3 });
+        } else {
+          map.removeLayer(line);
+        }
+      });
+
+      // Show itinerary panel
+      if (day !== 'all' && DAY_ITINERARY[day]) {
+        const items = DAY_ITINERARY[day];
+        const dayNum = parseInt(day);
+        panel.innerHTML = `
+          <h4 style="color:${DAY_COLORS[dayNum]}">
+            <i class="fa-solid fa-route"></i> ${DAY_LABELS[dayNum]} 行程
+          </h4>
+          ${items.map(it => `
+            <div class="itin-item">
+              <span class="itin-time">${it.time}</span>
+              <span>${it.text}</span>
+            </div>
+          `).join('')}
+        `;
+        panel.style.display = 'block';
+      } else {
+        panel.style.display = 'none';
+      }
+    }
+
     document.querySelectorAll('.day-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        // TODO: filter markers by day when itinerary is finalized
+        filterDay(btn.dataset.day);
       });
     });
 
@@ -230,10 +389,14 @@
           <span>行程涵蓋區域</span>
         </div>
         <div class="legend-item">
-          <div class="legend-color" style="background:#e0e0e0;border-color:#999;"></div>
+          <div class="legend-color" style="background:#e0e0e0;border-color:#bbb;"></div>
           <span>未涵蓋區域</span>
         </div>
-        <div class="legend-item" style="margin-top:6px;">
+        <div class="legend-item" style="margin-top:8px;">
+          <div class="legend-color" style="background:#1a1a2e;border-radius:50%;"></div>
+          <span>住宿</span>
+        </div>
+        <div class="legend-item">
           <div class="legend-color" style="background:#d63384;border-radius:50%;"></div>
           <span>景點</span>
         </div>
@@ -244,6 +407,22 @@
         <div class="legend-item">
           <div class="legend-color" style="background:#6c5ce7;border-radius:50%;"></div>
           <span>體驗</span>
+        </div>
+        <div class="legend-item" style="margin-top:8px;">
+          <div class="legend-color" style="background:#e74c3c;border-radius:2px;height:4px;margin:7px 0;"></div>
+          <span>Fri</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background:#3498db;border-radius:2px;height:4px;margin:7px 0;"></div>
+          <span>Sat</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background:#2ecc71;border-radius:2px;height:4px;margin:7px 0;"></div>
+          <span>Sun</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background:#f39c12;border-radius:2px;height:4px;margin:7px 0;"></div>
+          <span>Mon</span>
         </div>
       `;
       return div;

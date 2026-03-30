@@ -1,5 +1,17 @@
 [
   {
+    "id": "hwu-meei-motel",
+    "name": "湖美時尚汽車旅館",
+    "name_en": "Hwu Meei Motel",
+    "lat": 22.9945,
+    "lng": 120.1985,
+    "district": "中西區",
+    "type": "hotel",
+    "icon": "bed",
+    "note": "住宿基地・獨立車庫・免費早餐・SPA",
+    "day": [1, 2, 3, 4]
+  },
+  {
     "id": "wanpi-world",
     "name": "頑皮世界",
     "name_en": "Wanpi World Safari Zoo",
@@ -8,29 +20,8 @@
     "district": "學甲區",
     "type": "attraction",
     "icon": "paw",
-    "note": "野生動物園，適合半天行程"
-  },
-  {
-    "id": "kapok-road",
-    "name": "林初埤木棉花道",
-    "name_en": "Linchupi Kapok Flower Road",
-    "lat": 23.3389,
-    "lng": 120.3867,
-    "district": "白河區",
-    "type": "attraction",
-    "icon": "tree",
-    "note": "花期約 3 月中～4 月初，可能接近尾聲"
-  },
-  {
-    "id": "fairy-lake-farm",
-    "name": "仙湖農場",
-    "name_en": "Fairy Lake Farm",
-    "lat": 23.2596,
-    "lng": 120.4816,
-    "district": "東山區",
-    "type": "attraction",
-    "icon": "mountain-sun",
-    "note": "山區農場，可住宿或純參觀，車程較遠"
+    "note": "野生動物園，適合半天・Mon 北上順路",
+    "day": [4]
   },
   {
     "id": "qigu-salt-mountain",
@@ -41,7 +32,8 @@
     "district": "七股區",
     "type": "attraction",
     "icon": "mountain",
-    "note": "台灣鹽業博物館旁，免費爬鹽山"
+    "note": "台灣鹽業博物館旁，免費爬鹽山",
+    "day": [2]
   },
   {
     "id": "dingtou-sandbar",
@@ -52,7 +44,8 @@
     "district": "七股區",
     "type": "attraction",
     "icon": "umbrella-beach",
-    "note": "台灣版撒哈拉沙漠，偏遠但壯觀"
+    "note": "台灣版撒哈拉沙漠，偏遠但壯觀",
+    "day": [2]
   },
   {
     "id": "yuguang-island",
@@ -63,7 +56,8 @@
     "district": "安平區",
     "type": "attraction",
     "icon": "water",
-    "note": "安平南側小島，沙灘夕陽"
+    "note": "安平南側小島，沙灘夕陽（去過，順路再訪）",
+    "day": [2]
   },
   {
     "id": "sunset-platform",
@@ -74,40 +68,8 @@
     "district": "安平區",
     "type": "attraction",
     "icon": "sun",
-    "note": "看夕陽的經典地點"
-  },
-  {
-    "id": "ninao",
-    "name": "蜷尾家",
-    "name_en": "Ninao",
-    "lat": 22.9921,
-    "lng": 120.1964,
-    "district": "中西區",
-    "type": "food",
-    "icon": "ice-cream",
-    "note": "正興街人氣霜淇淋"
-  },
-  {
-    "id": "sangwon-shop",
-    "name": "桑原商店（又又美）",
-    "name_en": "Sangwon Shop",
-    "lat": 22.9930,
-    "lng": 120.2030,
-    "district": "中西區",
-    "type": "food",
-    "icon": "store",
-    "note": "Hannah 指定"
-  },
-  {
-    "id": "garden-night-market",
-    "name": "花園夜市",
-    "name_en": "Garden Night Market",
-    "lat": 23.0000,
-    "lng": 120.1945,
-    "district": "北區",
-    "type": "food",
-    "icon": "utensils",
-    "note": "週四/六/日營業"
+    "note": "看夕陽的經典地點（去過，順路再訪）",
+    "day": [2]
   },
   {
     "id": "gold-coast",
@@ -118,7 +80,56 @@
     "district": "南區",
     "type": "attraction",
     "icon": "person-swimming",
-    "note": "長沙灘，適合散步"
+    "note": "長沙灘，適合散步",
+    "day": [2]
+  },
+  {
+    "id": "ninao",
+    "name": "蜷尾家",
+    "name_en": "Ninao",
+    "lat": 22.9921,
+    "lng": 120.1964,
+    "district": "中西區",
+    "type": "food",
+    "icon": "ice-cream",
+    "note": "正興街人氣霜淇淋",
+    "day": [3]
+  },
+  {
+    "id": "sangwon-shop",
+    "name": "桑原商店（又又美）",
+    "name_en": "Sangwon Shop",
+    "lat": 22.9930,
+    "lng": 120.2030,
+    "district": "中西區",
+    "type": "food",
+    "icon": "store",
+    "note": "Hannah 指定",
+    "day": [3]
+  },
+  {
+    "id": "garden-night-market",
+    "name": "花園夜市",
+    "name_en": "Garden Night Market",
+    "lat": 23.0000,
+    "lng": 120.1945,
+    "district": "北區",
+    "type": "food",
+    "icon": "utensils",
+    "note": "週四/六/日營業",
+    "day": [2, 3]
+  },
+  {
+    "id": "dadong-night-market",
+    "name": "大東夜市",
+    "name_en": "Dadong Night Market",
+    "lat": 22.9886,
+    "lng": 120.2280,
+    "district": "東區",
+    "type": "food",
+    "icon": "utensils",
+    "note": "週一/二/五營業",
+    "day": [1]
   },
   {
     "id": "qipao-photo",
@@ -129,7 +140,8 @@
     "district": "中西區",
     "type": "activity",
     "icon": "camera",
-    "note": "孔廟/府中街一帶，旗袍體驗拍照"
+    "note": "孔廟/府中街一帶，旗袍體驗拍照",
+    "day": [3]
   },
   {
     "id": "cafe",
@@ -140,7 +152,8 @@
     "district": "中西區",
     "type": "food",
     "icon": "mug-hot",
-    "note": "神農街/正興街一帶"
+    "note": "神農街/正興街一帶",
+    "day": [3]
   },
   {
     "id": "dandan",
@@ -151,7 +164,8 @@
     "district": "東區",
     "type": "food",
     "icon": "burger",
-    "note": "南部限定速食，必吃"
+    "note": "南部限定速食，必吃",
+    "day": [1]
   },
   {
     "id": "beef-soup",
@@ -162,6 +176,7 @@
     "district": "中西區",
     "type": "food",
     "icon": "bowl-food",
-    "note": "台南名物，每天早餐都要喝"
+    "note": "台南名物，每天早餐都要喝",
+    "day": [2, 3, 4]
   }
 ]

@@ -39,12 +39,12 @@
     "id": "qionglin-farmers",
     "name": "芎林鄉農會（果菜市場）",
     "name_en": "Qionglin Farmers Association",
-    "lat": 24.7698,
-    "lng": 121.0771,
+    "lat": 24.7740,
+    "lng": 121.0760,
     "district": "新竹縣芎林鄉",
     "type": "origin",
     "icon": "leaf",
-    "note": "文昌街120號",
+    "note": "上山村文山路626號",
     "day": [1]
   },
   {

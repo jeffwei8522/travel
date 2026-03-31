@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>2026 台南小旅行 — Jeff & Hannah</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
@@ -17,64 +17,128 @@
   <link rel="apple-touch-icon" href="icon-192.png">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Noto Sans TC', sans-serif; }
+    body { font-family: 'Noto Sans TC', sans-serif; overflow: hidden; height: 100vh; }
 
-    /* Top bar */
-    .topbar {
-      background: linear-gradient(to right, #ffafbd, #ffc3a0);
-      color: #fff;
-      padding: 0.8rem 1.2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-      z-index: 1000;
-      position: relative;
-    }
-    .topbar h1 { font-size: 1.2rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
-    .topbar .subtitle { font-size: 0.85rem; opacity: 0.9; }
+    /* Map takes full screen */
+    #map { width: 100%; height: 100vh; z-index: 1; }
 
-    /* Day filter buttons */
+    /* Floating day filter - top center */
     .day-filter {
+      position: fixed;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
       display: flex;
-      gap: 0.4rem;
-      flex-wrap: wrap;
+      gap: 6px;
+      background: rgba(255,255,255,0.95);
+      padding: 8px 12px;
+      border-radius: 25px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+      max-width: calc(100vw - 24px);
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
     .day-btn {
-      padding: 0.35rem 0.8rem;
-      border: 2px solid #fff;
+      padding: 6px 12px;
+      border: 2px solid #d63384;
       border-radius: 20px;
-      background: transparent;
-      color: #fff;
+      background: #fff;
+      color: #d63384;
       font-weight: bold;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       cursor: pointer;
       transition: all 0.2s;
       font-family: 'Noto Sans TC', sans-serif;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
-    .day-btn:hover { background: rgba(255,255,255,0.3); }
-    .day-btn.active { background: #fff; color: #d63384; }
+    .day-btn:hover { background: #fff0f5; }
+    .day-btn.active { background: #d63384; color: #fff; }
 
-    /* Map container */
-    #map { width: 100%; height: calc(100vh - 56px); }
-
-    /* Legend */
-    .legend {
-      background: white;
-      padding: 12px 16px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    /* Floating title - top left */
+    .title-badge {
+      position: fixed;
+      top: 60px;
+      left: 12px;
+      z-index: 1000;
+      background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
       font-size: 0.85rem;
-      line-height: 1.8;
+      font-weight: bold;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.15);
+      pointer-events: none;
     }
-    .legend h4 { margin-bottom: 6px; color: #333; }
-    .legend-item { display: flex; align-items: center; gap: 8px; }
+
+    /* Legend - collapsible on mobile */
+    .legend {
+      background: rgba(255,255,255,0.95);
+      padding: 10px 14px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      font-size: 0.8rem;
+      line-height: 1.7;
+      max-height: 50vh;
+      overflow-y: auto;
+    }
+    .legend h4 { margin-bottom: 4px; color: #333; cursor: pointer; }
+    .legend-item { display: flex; align-items: center; gap: 6px; }
     .legend-color {
-      width: 18px; height: 18px;
+      width: 16px; height: 16px;
       border-radius: 3px;
       border: 1px solid rgba(0,0,0,0.2);
       flex-shrink: 0;
     }
+    .legend-body { transition: max-height 0.3s; overflow: hidden; }
+    .legend.collapsed .legend-body { max-height: 0; }
+
+    /* Itinerary bottom sheet */
+    .itin-sheet {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 1001;
+      background: #fff;
+      border-radius: 16px 16px 0 0;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+      max-height: 45vh;
+      overflow-y: auto;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+      -webkit-overflow-scrolling: touch;
+    }
+    .itin-sheet.open { transform: translateY(0); }
+    .itin-sheet .handle {
+      width: 40px; height: 4px;
+      background: #ddd;
+      border-radius: 2px;
+      margin: 10px auto 6px;
+    }
+    .itin-sheet .sheet-header {
+      padding: 0 16px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .itin-sheet h4 { margin: 0; font-size: 1rem; }
+    .itin-sheet .close-btn {
+      background: none; border: none;
+      font-size: 1.2rem; color: #999; cursor: pointer;
+    }
+    .itin-sheet .itin-list { padding: 0 16px 20px; }
+    .itin-sheet .itin-item {
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+    }
+    .itin-sheet .itin-item:last-child { border-bottom: none; }
+    .itin-time { font-weight: bold; color: #888; min-width: 50px; }
 
     /* Popup styling */
     .place-popup h3 { color: #d63384; margin-bottom: 4px; font-size: 1rem; }
@@ -100,48 +164,41 @@
       margin-top: 4px;
     }
 
-    /* Itinerary panel */
-    .itinerary-panel {
-      position: absolute;
-      bottom: 20px;
-      left: 10px;
-      z-index: 1000;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
-      padding: 14px 16px;
-      max-width: 320px;
-      font-size: 0.85rem;
-      display: none;
+    /* Mobile tweaks */
+    @media (max-width: 480px) {
+      .day-filter { gap: 4px; padding: 6px 8px; }
+      .day-btn { font-size: 0.72rem; padding: 5px 8px; }
+      .title-badge { font-size: 0.75rem; padding: 6px 10px; top: 54px; }
+      .legend { font-size: 0.72rem; padding: 8px 10px; }
     }
-    .itinerary-panel h4 { color: #d63384; margin-bottom: 8px; }
-    .itinerary-panel .itin-item {
-      padding: 4px 0;
-      border-bottom: 1px solid #f0f0f0;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .itinerary-panel .itin-item:last-child { border-bottom: none; }
-    .itin-time { font-weight: bold; color: #888; min-width: 50px; }
   </style>
 </head>
 <body>
-  <div class="topbar">
-    <div>
-      <h1>2026 台南小旅行</h1>
-      <span class="subtitle">4/3 (五) ~ 4/6 (一) ・ Jeff & Hannah</span>
-    </div>
-    <div class="day-filter">
-      <button class="day-btn active" data-day="all">全部</button>
-      <button class="day-btn" data-day="1" data-color="#e74c3c">Fri 抵達</button>
-      <button class="day-btn" data-day="2" data-color="#3498db">Sat 海岸</button>
-      <button class="day-btn" data-day="3" data-color="#2ecc71">Sun 市區</button>
-      <button class="day-btn" data-day="4" data-color="#f39c12">Mon 北上</button>
-    </div>
+  <!-- Floating day filter -->
+  <div class="day-filter">
+    <button class="day-btn active" data-day="all">全部</button>
+    <button class="day-btn" data-day="1">Fri 出發</button>
+    <button class="day-btn" data-day="2">Sat 海岸</button>
+    <button class="day-btn" data-day="3">Sun</button>
+    <button class="day-btn" data-day="4">Mon 北上</button>
   </div>
+
+  <!-- Title badge -->
+  <div class="title-badge">
+    <i class="fa-solid fa-heart"></i> 2026 台南小旅行 ・ 4/3-4/6
+  </div>
+
   <div id="map"></div>
-  <div class="itinerary-panel" id="itinerary-panel"></div>
+
+  <!-- Itinerary bottom sheet -->
+  <div class="itin-sheet" id="itin-sheet">
+    <div class="handle"></div>
+    <div class="sheet-header">
+      <h4 id="sheet-title"></h4>
+      <button class="close-btn" id="sheet-close"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="itin-list" id="sheet-list"></div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
@@ -217,82 +274,61 @@
       activity:   '體驗'
     };
 
-    const VISITED_STYLE = {
-      fillColor: '#ffafbd',
-      fillOpacity: 0.35,
-      color: '#d63384',
-      weight: 2
-    };
-    const UNVISITED_STYLE = {
-      fillColor: '#e0e0e0',
-      fillOpacity: 0.15,
-      color: '#bbb',
-      weight: 1
-    };
-    const ORIGIN_STYLE = {
-      fillColor: '#74b9ff',
-      fillOpacity: 0.25,
-      color: '#0984e3',
-      weight: 2
-    };
+    const VISITED_STYLE = { fillColor: '#ffafbd', fillOpacity: 0.35, color: '#d63384', weight: 2 };
+    const UNVISITED_STYLE = { fillColor: '#e0e0e0', fillOpacity: 0.15, color: '#bbb', weight: 1 };
+    const ORIGIN_STYLE = { fillColor: '#74b9ff', fillOpacity: 0.25, color: '#0984e3', weight: 2 };
 
-    // Districts with origin points (Hsinchu + Linkou)
     const ORIGIN_DISTRICTS = [
-      '東區', '北區', '香山區',  // 新竹市
+      '東區', '北區', '香山區',
       '芎林鄉', '竹北市', '竹東鎮', '新埔鎮', '新豐鄉',
       '湖口鄉', '橫山鄉', '關西鎮', '北埔鄉', '峨眉鄉',
-      '寶山鄉', '五峰鄉', '尖石鄉',  // 新竹縣
-      '林口區'  // 新北市
+      '寶山鄉', '五峰鄉', '尖石鄉',
+      '林口區'
     ];
 
-    // --- Map init ---
-    const map = L.map('map', { zoomControl: true }).setView([23.00, 120.18], 12);
+    // --- Map init (full screen, no initial view - will fitBounds) ---
+    const map = L.map('map', {
+      zoomControl: false,
+      attributionControl: false
+    }).setView([23.5, 120.5], 8);
+
+    // Zoom control - top right (avoid conflict with day buttons)
+    L.control.zoom({ position: 'topright' }).addTo(map);
+    L.control.attribution({ position: 'bottomleft', prefix: false })
+      .addAttribution('&copy; OSM &copy; CARTO').addTo(map);
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; OpenStreetMap &copy; CARTO',
       maxZoom: 19
     }).addTo(map);
 
     // --- Load data ---
-    let districtLayer, allMarkers = [], routeLines = [];
+    let allMarkers = [], routeLines = [], allPlaces = [];
 
     Promise.all([
       fetch('data/districts.geojson').then(r => r.json()),
       fetch('data/hsinchu_linkou.geojson').then(r => r.json()),
       fetch('data/places.json').then(r => r.json())
     ]).then(([districts, hsinchu, places]) => {
-      // Draw Tainan district polygons
-      districtLayer = L.geoJSON(districts, {
-        style: feature => {
-          const name = feature.properties.TOWNNAME;
-          return VISITED_DISTRICTS.includes(name) ? VISITED_STYLE : UNVISITED_STYLE;
-        },
-        onEachFeature: (feature, layer) => {
-          layer.bindTooltip(feature.properties.TOWNNAME, {
-            sticky: true, direction: 'center'
-          });
-        }
+      allPlaces = places;
+
+      // Draw Tainan polygons
+      L.geoJSON(districts, {
+        style: f => VISITED_DISTRICTS.includes(f.properties.TOWNNAME) ? VISITED_STYLE : UNVISITED_STYLE,
+        onEachFeature: (f, layer) => layer.bindTooltip(f.properties.TOWNNAME, { sticky: true, direction: 'center' })
       }).addTo(map);
 
       // Draw Hsinchu + Linkou polygons
       L.geoJSON(hsinchu, {
-        style: feature => {
-          const name = feature.properties.TOWNNAME;
-          return ORIGIN_DISTRICTS.includes(name) ? ORIGIN_STYLE : UNVISITED_STYLE;
-        },
-        onEachFeature: (feature, layer) => {
-          const p = feature.properties;
-          layer.bindTooltip(`${p.COUNTYNAME} ${p.TOWNNAME}`, {
-            sticky: true, direction: 'center'
-          });
-        }
+        style: f => ORIGIN_DISTRICTS.includes(f.properties.TOWNNAME) ? ORIGIN_STYLE : UNVISITED_STYLE,
+        onEachFeature: (f, layer) => layer.bindTooltip(`${f.properties.COUNTYNAME} ${f.properties.TOWNNAME}`, { sticky: true, direction: 'center' })
       }).addTo(map);
 
       // Draw markers
       places.forEach(place => {
         const isHotel = place.type === 'hotel';
+        const isOrigin = place.type === 'origin';
         const color = TYPE_COLORS[place.type] || '#333';
-        const size = isHotel ? 40 : 32;
+        const size = isHotel ? 38 : (isOrigin ? 28 : 32);
         const badge = TYPE_LABELS[place.type] || place.type;
 
         const dayTags = (place.day || []).map(d =>
@@ -303,21 +339,18 @@
           icon: L.divIcon({
             className: 'custom-marker',
             html: `<div style="
-              background: ${color};
-              color: #fff;
-              width: ${size}px; height: ${size}px;
-              border-radius: 50%;
-              display: flex; align-items: center; justify-content: center;
-              box-shadow: 0 2px 8px rgba(0,0,0,${isHotel ? 0.5 : 0.3});
-              border: ${isHotel ? 3 : 2}px solid #fff;
-              font-size: ${isHotel ? 18 : 14}px;
-              ${isHotel ? 'animation: pulse 2s infinite;' : ''}
+              background:${color}; color:#fff;
+              width:${size}px; height:${size}px; border-radius:50%;
+              display:flex; align-items:center; justify-content:center;
+              box-shadow:0 2px 6px rgba(0,0,0,${isHotel?0.5:0.3});
+              border:${isHotel?3:2}px solid #fff;
+              font-size:${isHotel?16:(isOrigin?12:14)}px;
             "><i class="fa-solid fa-${place.icon}"></i></div>`,
             iconSize: [size, size],
             iconAnchor: [size/2, size/2],
             popupAnchor: [0, -size/2]
           }),
-          zIndexOffset: isHotel ? 1000 : 0
+          zIndexOffset: isHotel ? 1000 : (isOrigin ? -100 : 0)
         });
 
         marker.bindPopup(`
@@ -328,25 +361,19 @@
             <div class="note">${place.note}</div>
             <div class="day-tags">${dayTags}</div>
           </div>
-        `, { maxWidth: 280 });
+        `, { maxWidth: 260 });
 
         marker.placeData = place;
         marker.addTo(map);
         allMarkers.push(marker);
       });
 
-      // Fit bounds
-      if (allMarkers.length) {
-        map.fitBounds(L.featureGroup(allMarkers).getBounds().pad(0.1));
-      }
-
-      // Build route lines for each day
+      // Build route lines
       for (const [day, color] of Object.entries(DAY_COLORS)) {
         const dayNum = parseInt(day);
-        const dayPlaces = places.filter(p => p.day && p.day.includes(dayNum) && p.type !== 'hotel');
+        const dayPlaces = places.filter(p => p.day && p.day.includes(dayNum) && p.type !== 'hotel' && p.type !== 'origin');
         if (dayPlaces.length < 2) continue;
 
-        // Add hotel as start/end
         const hotel = places.find(p => p.type === 'hotel');
         const coords = [
           [hotel.lat, hotel.lng],
@@ -354,65 +381,81 @@
           [hotel.lat, hotel.lng]
         ];
 
-        const line = L.polyline(coords, {
-          color: color,
-          weight: 3,
-          opacity: 0.6,
-          dashArray: '8, 8'
-        });
+        const line = L.polyline(coords, { color, weight: 3, opacity: 0.5, dashArray: '8, 8' });
         line.dayNum = dayNum;
         routeLines.push(line);
       }
+
+      // Initial view: fit all markers
+      fitToDay('all');
     });
 
+    // --- Zoom to day's centroid ---
+    function fitToDay(day) {
+      let targets;
+      if (day === 'all') {
+        targets = allMarkers;
+      } else {
+        const dayNum = parseInt(day);
+        targets = allMarkers.filter(m => {
+          const p = m.placeData;
+          return p.type === 'hotel' || (p.day && p.day.includes(dayNum));
+        });
+      }
+      if (targets.length) {
+        const group = L.featureGroup(targets);
+        map.fitBounds(group.getBounds().pad(0.15), { maxZoom: 14, animate: true, duration: 0.5 });
+      }
+    }
+
     // --- Day filter ---
-    const panel = document.getElementById('itinerary-panel');
+    const sheet = document.getElementById('itin-sheet');
+    const sheetTitle = document.getElementById('sheet-title');
+    const sheetList = document.getElementById('sheet-list');
+    const sheetClose = document.getElementById('sheet-close');
 
     function filterDay(day) {
+      const dayNum = parseInt(day);
+
       // Show/hide markers
       allMarkers.forEach(m => {
         const place = m.placeData;
-        if (day === 'all' || place.type === 'hotel' || (place.day && place.day.includes(parseInt(day)))) {
-          m.setOpacity(1);
-          if (m.getElement()) m.getElement().style.pointerEvents = 'auto';
-        } else {
-          m.setOpacity(0.2);
-          if (m.getElement()) m.getElement().style.pointerEvents = 'none';
-        }
+        const visible = day === 'all' || place.type === 'hotel' || (place.day && place.day.includes(dayNum));
+        m.setOpacity(visible ? 1 : 0.15);
+        const el = m.getElement();
+        if (el) el.style.pointerEvents = visible ? 'auto' : 'none';
       });
 
       // Show/hide route lines
       routeLines.forEach(line => {
-        if (day === 'all' || line.dayNum === parseInt(day)) {
+        if (day === 'all' || line.dayNum === dayNum) {
           line.addTo(map);
-          if (day !== 'all') line.setStyle({ opacity: 0.8, weight: 4 });
-          else line.setStyle({ opacity: 0.4, weight: 3 });
+          line.setStyle(day === 'all' ? { opacity: 0.4, weight: 3 } : { opacity: 0.8, weight: 4 });
         } else {
           map.removeLayer(line);
         }
       });
 
-      // Show itinerary panel
+      // Zoom to centroid
+      fitToDay(day);
+
+      // Bottom sheet
       if (day !== 'all' && DAY_ITINERARY[day]) {
         const items = DAY_ITINERARY[day];
-        const dayNum = parseInt(day);
-        panel.innerHTML = `
-          <h4 style="color:${DAY_COLORS[dayNum]}">
-            <i class="fa-solid fa-route"></i> ${DAY_LABELS[dayNum]} 行程
-          </h4>
-          ${items.map(it => `
-            <div class="itin-item">
-              <span class="itin-time">${it.time}</span>
-              <span>${it.text}</span>
-            </div>
-          `).join('')}
-        `;
-        panel.style.display = 'block';
+        sheetTitle.innerHTML = `<span style="color:${DAY_COLORS[dayNum]}"><i class="fa-solid fa-route"></i> ${DAY_LABELS[dayNum]}</span>`;
+        sheetList.innerHTML = items.map(it => `
+          <div class="itin-item">
+            <span class="itin-time">${it.time}</span>
+            <span>${it.text}</span>
+          </div>
+        `).join('');
+        sheet.classList.add('open');
       } else {
-        panel.style.display = 'none';
+        sheet.classList.remove('open');
       }
     }
 
+    // Day button clicks
     document.querySelectorAll('.day-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
@@ -421,64 +464,39 @@
       });
     });
 
-    // --- Legend ---
+    // Close bottom sheet
+    sheetClose.addEventListener('click', () => sheet.classList.remove('open'));
+
+    // --- Legend (collapsible) ---
     const legend = L.control({ position: 'bottomright' });
     legend.onAdd = () => {
       const div = L.DomUtil.create('div', 'legend');
       div.innerHTML = `
-        <h4>圖例</h4>
-        <div class="legend-item">
-          <div class="legend-color" style="background:#74b9ff;border-color:#0984e3;"></div>
-          <span>出發地（新竹/林口）</span>
-        </div>
-        <div class="legend-item">
-          <div class="legend-color" style="background:#ffafbd;border-color:#d63384;"></div>
-          <span>行程涵蓋區域</span>
-        </div>
-        <div class="legend-item">
-          <div class="legend-color" style="background:#e0e0e0;border-color:#bbb;"></div>
-          <span>未涵蓋區域</span>
-        </div>
-        <div class="legend-item" style="margin-top:8px;">
-          <div class="legend-color" style="background:#2c3e50;border-radius:50%;"></div>
-          <span>出發點</span>
-        </div>
-        <div class="legend-item">
-          <div class="legend-color" style="background:#1a1a2e;border-radius:50%;"></div>
-          <span>住宿</span>
-        </div>
-        <div class="legend-item">
-          <div class="legend-color" style="background:#d63384;border-radius:50%;"></div>
-          <span>景點</span>
-        </div>
-        <div class="legend-item">
-          <div class="legend-color" style="background:#ff8c00;border-radius:50%;"></div>
-          <span>美食</span>
-        </div>
-        <div class="legend-item">
-          <div class="legend-color" style="background:#6c5ce7;border-radius:50%;"></div>
-          <span>體驗</span>
-        </div>
-        <div class="legend-item" style="margin-top:8px;">
-          <div class="legend-color" style="background:#e74c3c;border-radius:2px;height:4px;margin:7px 0;"></div>
-          <span>Fri</span>
-        </div>
-        <div class="legend-item">
-          <div class="legend-color" style="background:#3498db;border-radius:2px;height:4px;margin:7px 0;"></div>
-          <span>Sat</span>
-        </div>
-        <div class="legend-item">
-          <div class="legend-color" style="background:#2ecc71;border-radius:2px;height:4px;margin:7px 0;"></div>
-          <span>Sun</span>
-        </div>
-        <div class="legend-item">
-          <div class="legend-color" style="background:#f39c12;border-radius:2px;height:4px;margin:7px 0;"></div>
-          <span>Mon</span>
+        <h4 id="legend-toggle"><i class="fa-solid fa-layer-group"></i> 圖例 <i class="fa-solid fa-chevron-down" style="font-size:0.7rem;opacity:0.5;"></i></h4>
+        <div class="legend-body" id="legend-body">
+          <div class="legend-item"><div class="legend-color" style="background:#74b9ff;border-color:#0984e3;"></div><span>出發地</span></div>
+          <div class="legend-item"><div class="legend-color" style="background:#ffafbd;border-color:#d63384;"></div><span>行程區域</span></div>
+          <div class="legend-item"><div class="legend-color" style="background:#e0e0e0;border-color:#bbb;"></div><span>未涵蓋</span></div>
+          <div class="legend-item" style="margin-top:4px;"><div class="legend-color" style="background:#2c3e50;border-radius:50%;"></div><span>出發點</span></div>
+          <div class="legend-item"><div class="legend-color" style="background:#1a1a2e;border-radius:50%;"></div><span>住宿</span></div>
+          <div class="legend-item"><div class="legend-color" style="background:#d63384;border-radius:50%;"></div><span>景點</span></div>
+          <div class="legend-item"><div class="legend-color" style="background:#ff8c00;border-radius:50%;"></div><span>美食</span></div>
+          <div class="legend-item"><div class="legend-color" style="background:#6c5ce7;border-radius:50%;"></div><span>體驗</span></div>
         </div>
       `;
+      // Prevent map interaction when clicking legend
+      L.DomEvent.disableClickPropagation(div);
+      L.DomEvent.disableScrollPropagation(div);
       return div;
     };
     legend.addTo(map);
+
+    // Toggle legend
+    document.addEventListener('click', e => {
+      if (e.target.closest('#legend-toggle')) {
+        document.querySelector('.legend').classList.toggle('collapsed');
+      }
+    });
 
     // --- PWA Service Worker ---
     if ('serviceWorker' in navigator) {

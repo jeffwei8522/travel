@@ -1,0 +1,2 @@
+# Full Taiwan GeoJSON (~20MB) - use tools/extract_region.py to re-download
+data/tw_towns.geojson

@@ -1,9 +1,10 @@
-const CACHE_NAME = 'tainan-trip-v1';
+const CACHE_NAME = 'tainan-trip-v2';
 const ASSETS = [
   './',
   './index.html',
   './data/places.json',
   './data/districts.geojson',
+  './data/hsinchu_linkou.geojson',
   './manifest.json',
   'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css',
   'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js',

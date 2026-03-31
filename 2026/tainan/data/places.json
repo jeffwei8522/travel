@@ -1,5 +1,53 @@
 [
   {
+    "id": "hwu-linkou",
+    "name": "醒吾科技大學",
+    "name_en": "Hsing Wu University",
+    "lat": 25.0764,
+    "lng": 121.3668,
+    "district": "新北市林口區",
+    "type": "origin",
+    "icon": "graduation-cap",
+    "note": "Hannah 出發點",
+    "day": [1]
+  },
+  {
+    "id": "techstar-5f",
+    "name": "科技之星 5F",
+    "name_en": "TechStar HQ",
+    "lat": 24.8055,
+    "lng": 120.9688,
+    "district": "新竹市東區",
+    "type": "origin",
+    "icon": "building",
+    "note": "經國路二段56號5樓之1",
+    "day": [1]
+  },
+  {
+    "id": "home-jinguo",
+    "name": "經國路33號 2F",
+    "name_en": "Home",
+    "lat": 24.8048,
+    "lng": 120.9710,
+    "district": "新竹市東區",
+    "type": "origin",
+    "icon": "house",
+    "note": "出發集合點",
+    "day": [1]
+  },
+  {
+    "id": "qionglin-farmers",
+    "name": "芎林鄉農會（果菜市場）",
+    "name_en": "Qionglin Farmers Association",
+    "lat": 24.7698,
+    "lng": 121.0771,
+    "district": "新竹縣芎林鄉",
+    "type": "origin",
+    "icon": "leaf",
+    "note": "文昌街120號",
+    "day": [1]
+  },
+  {
     "id": "hwu-meei-motel",
     "name": "湖美時尚汽車旅館",
     "name_en": "Hwu Meei Motel",

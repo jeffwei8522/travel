@@ -202,6 +202,7 @@
     };
 
     const TYPE_COLORS = {
+      origin:     '#2c3e50',
       hotel:      '#1a1a2e',
       attraction: '#d63384',
       food:       '#ff8c00',
@@ -209,6 +210,7 @@
     };
 
     const TYPE_LABELS = {
+      origin:     '出發點',
       hotel:      '住宿',
       attraction: '景點',
       food:       '美食',
@@ -227,6 +229,21 @@
       color: '#bbb',
       weight: 1
     };
+    const ORIGIN_STYLE = {
+      fillColor: '#74b9ff',
+      fillOpacity: 0.25,
+      color: '#0984e3',
+      weight: 2
+    };
+
+    // Districts with origin points (Hsinchu + Linkou)
+    const ORIGIN_DISTRICTS = [
+      '東區', '北區', '香山區',  // 新竹市
+      '芎林鄉', '竹北市', '竹東鎮', '新埔鎮', '新豐鄉',
+      '湖口鄉', '橫山鄉', '關西鎮', '北埔鄉', '峨眉鄉',
+      '寶山鄉', '五峰鄉', '尖石鄉',  // 新竹縣
+      '林口區'  // 新北市
+    ];
 
     // --- Map init ---
     const map = L.map('map', { zoomControl: true }).setView([23.00, 120.18], 12);
@@ -241,9 +258,10 @@
 
     Promise.all([
       fetch('data/districts.geojson').then(r => r.json()),
+      fetch('data/hsinchu_linkou.geojson').then(r => r.json()),
       fetch('data/places.json').then(r => r.json())
-    ]).then(([districts, places]) => {
-      // Draw district polygons
+    ]).then(([districts, hsinchu, places]) => {
+      // Draw Tainan district polygons
       districtLayer = L.geoJSON(districts, {
         style: feature => {
           const name = feature.properties.TOWNNAME;
@@ -251,6 +269,20 @@
         },
         onEachFeature: (feature, layer) => {
           layer.bindTooltip(feature.properties.TOWNNAME, {
+            sticky: true, direction: 'center'
+          });
+        }
+      }).addTo(map);
+
+      // Draw Hsinchu + Linkou polygons
+      L.geoJSON(hsinchu, {
+        style: feature => {
+          const name = feature.properties.TOWNNAME;
+          return ORIGIN_DISTRICTS.includes(name) ? ORIGIN_STYLE : UNVISITED_STYLE;
+        },
+        onEachFeature: (feature, layer) => {
+          const p = feature.properties;
+          layer.bindTooltip(`${p.COUNTYNAME} ${p.TOWNNAME}`, {
             sticky: true, direction: 'center'
           });
         }
@@ -396,6 +428,10 @@
       div.innerHTML = `
         <h4>圖例</h4>
         <div class="legend-item">
+          <div class="legend-color" style="background:#74b9ff;border-color:#0984e3;"></div>
+          <span>出發地（新竹/林口）</span>
+        </div>
+        <div class="legend-item">
           <div class="legend-color" style="background:#ffafbd;border-color:#d63384;"></div>
           <span>行程涵蓋區域</span>
         </div>
@@ -404,6 +440,10 @@
           <span>未涵蓋區域</span>
         </div>
         <div class="legend-item" style="margin-top:8px;">
+          <div class="legend-color" style="background:#2c3e50;border-radius:50%;"></div>
+          <span>出發點</span>
+        </div>
+        <div class="legend-item">
           <div class="legend-color" style="background:#1a1a2e;border-radius:50%;"></div>
           <span>住宿</span>
         </div>

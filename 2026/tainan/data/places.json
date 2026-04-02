@@ -56,7 +56,7 @@
     "district": "中西區（近北區交界）",
     "type": "hotel",
     "icon": "bed",
-    "note": "住宿基地・獨立車庫・免費早餐・SPA",
+    "note": "住宿基地 3 晚（電話訂房）・獨立車庫・免費早餐・SPA",
     "day": [1, 2, 3, 4]
   },
   {
@@ -68,8 +68,8 @@
     "district": "學甲區",
     "type": "attraction",
     "icon": "paw",
-    "note": "野生動物園，適合半天・Mon 北上順路",
-    "day": [4]
+    "note": "野生動物園，半天・跟七股同天（僅 15 min）",
+    "day": [2]
   },
   {
     "id": "qigu-salt-mountain",
@@ -105,7 +105,7 @@
     "type": "attraction",
     "icon": "water",
     "note": "安平南側小島，沙灘夕陽（去過，順路再訪）",
-    "day": [2]
+    "day": [3]
   },
   {
     "id": "sunset-platform",
@@ -117,7 +117,7 @@
     "type": "attraction",
     "icon": "sun",
     "note": "看夕陽的經典地點（去過，順路再訪）",
-    "day": [2]
+    "day": [3]
   },
   {
     "id": "gold-coast",
@@ -141,7 +141,7 @@
     "type": "food",
     "icon": "ice-cream",
     "note": "正興街人氣霜淇淋",
-    "day": [3]
+    "day": [4]
   },
   {
     "id": "sangwon-shop",
@@ -153,7 +153,7 @@
     "type": "food",
     "icon": "store",
     "note": "Hannah 指定",
-    "day": [3]
+    "day": [4]
   },
   {
     "id": "garden-night-market",
@@ -213,7 +213,7 @@
     "type": "food",
     "icon": "mug-hot",
     "note": "神農街/正興街一帶",
-    "day": [3]
+    "day": [4]
   },
   {
     "id": "dandan",

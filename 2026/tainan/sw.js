@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tainan-trip-v4';
+const CACHE_NAME = 'tainan-trip-v5';
 const ASSETS = [
   './',
   './index.html',

@@ -36,6 +36,18 @@
     "day": [1]
   },
   {
+    "id": "minxiong-delivery",
+    "name": "民雄中樂村（送草仔粿）",
+    "name_en": "Minxiong Delivery Stop",
+    "lat": 23.5572,
+    "lng": 120.4291,
+    "district": "嘉義縣民雄鄉",
+    "type": "waypoint",
+    "icon": "box-open",
+    "note": "復興路一段63巷9-17號・國道1號順路下民雄交流道",
+    "day": [1]
+  },
+  {
     "id": "qionglin-farmers",
     "name": "芎林鄉農會（果菜市場）",
     "name_en": "Qionglin Farmers Association",

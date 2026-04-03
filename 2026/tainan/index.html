@@ -215,8 +215,10 @@
 
     const DAY_ITINERARY = {
       1: [
-        { time: '14:00', text: '🚗 林口出發（國道南下）' },
-        { time: '17:00', text: '抵達台南' },
+        { time: '14:00', text: '🚗 林口出發（國道1南下）' },
+        { time: '16:00', text: '📦 民雄交流道下 → 送草仔粿' },
+        { time: '16:30', text: '🚗 繼續南下' },
+        { time: '17:15', text: '抵達台南' },
         { time: '18:00', text: '🏨 Check-in 湖美' },
         { time: '18:30', text: '🍔 丹丹漢堡晚餐' },
         { time: '20:00', text: '🌙 大東夜市（週五）' }
@@ -227,7 +229,7 @@
         { time: '12:00', text: '🧂 七股鹽山（頑皮過去僅 15 min）' },
         { time: '13:30', text: '🏜️ 頂頭額沙洲（車程 20 min）' },
         { time: '15:30', text: '🏖️ 黃金海岸（車程 40 min）' },
-        { time: '17:00', text: '🌅 觀夕平台看日落' },
+        { time: '17:00', text: '🌅 黃金海岸看日落' },
         { time: '19:00', text: '🌙 花園夜市 or 武聖夜市（週六都有）' }
       ],
       3: [
@@ -251,6 +253,7 @@
 
     const TYPE_COLORS = {
       origin:     '#2c3e50',
+      waypoint:   '#e17055',
       hotel:      '#1a1a2e',
       attraction: '#d63384',
       food:       '#ff8c00',
@@ -259,6 +262,7 @@
 
     const TYPE_LABELS = {
       origin:     '出發點',
+      waypoint:   '中途站',
       hotel:      '住宿',
       attraction: '景點',
       food:       '美食',
@@ -362,7 +366,7 @@
       // Build route lines
       for (const [day, color] of Object.entries(DAY_COLORS)) {
         const dayNum = parseInt(day);
-        const dayPlaces = places.filter(p => p.day && p.day.includes(dayNum) && p.type !== 'hotel' && p.type !== 'origin');
+        const dayPlaces = places.filter(p => p.day && p.day.includes(dayNum) && p.type !== 'hotel' && p.type !== 'origin' && p.type !== 'waypoint');
         if (dayPlaces.length < 2) continue;
 
         const hotel = places.find(p => p.type === 'hotel');
@@ -469,6 +473,7 @@
           <div class="legend-item"><div class="legend-color" style="background:#ffafbd;border-color:#d63384;"></div><span>行程區域</span></div>
           <div class="legend-item"><div class="legend-color" style="background:#e0e0e0;border-color:#bbb;"></div><span>未涵蓋</span></div>
           <div class="legend-item" style="margin-top:4px;"><div class="legend-color" style="background:#2c3e50;border-radius:50%;"></div><span>出發點</span></div>
+          <div class="legend-item"><div class="legend-color" style="background:#e17055;border-radius:50%;"></div><span>中途站</span></div>
           <div class="legend-item"><div class="legend-color" style="background:#1a1a2e;border-radius:50%;"></div><span>住宿</span></div>
           <div class="legend-item"><div class="legend-color" style="background:#d63384;border-radius:50%;"></div><span>景點</span></div>
           <div class="legend-item"><div class="legend-color" style="background:#ff8c00;border-radius:50%;"></div><span>美食</span></div>

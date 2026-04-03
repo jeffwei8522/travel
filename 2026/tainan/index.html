@@ -42,7 +42,11 @@
       flex-wrap: nowrap;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
+      max-width: 60vw;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
     }
+    .day-filter::-webkit-scrollbar { display: none; }
     .day-btn {
       padding: 0.35rem 0.8rem;
       border: 2px solid #fff;
@@ -57,7 +61,7 @@
       white-space: nowrap;
       flex-shrink: 0;
     }
-    .day-btn:hover { background: rgba(255,255,255,0.3); }
+    .day-btn:hover, .day-btn:active { background: rgba(255,255,255,0.3); }
     .day-btn.active { background: #fff; color: #d63384; }
 
     /* Map fills remaining space below topbar */
@@ -117,7 +121,7 @@
       background: none; border: none;
       font-size: 1.2rem; color: #999; cursor: pointer;
     }
-    .itin-sheet .itin-list { padding: 0 16px 20px; }
+    .itin-sheet .itin-list { padding: 0 16px calc(20px + env(safe-area-inset-bottom, 0px)); }
     .itin-sheet .itin-item {
       padding: 8px 0;
       border-bottom: 1px solid #f0f0f0;
@@ -127,7 +131,7 @@
       font-size: 0.9rem;
     }
     .itin-sheet .itin-item:last-child { border-bottom: none; }
-    .itin-sheet .itin-item[onclick] { transition: background 0.15s; border-radius: 6px; padding-left: 4px; }
+    .itin-sheet .itin-item[onclick] { transition: background 0.15s; border-radius: 6px; padding-left: 4px; cursor: pointer; }
     .itin-sheet .itin-item[onclick]:hover, .itin-sheet .itin-item[onclick]:active { background: #fff0f5; }
     .itin-time { font-weight: bold; color: #888; min-width: 50px; }
 
@@ -154,6 +158,9 @@
       color: #fff;
       margin-top: 4px;
     }
+
+    /* Zoom control safe area */
+    .leaflet-top.leaflet-right { margin-top: env(safe-area-inset-top, 0px); }
 
     /* Mobile tweaks */
     @media (max-width: 480px) {
@@ -373,7 +380,7 @@
             <div class="day-tags">${dayTags}</div>
             ${navLinks}
           </div>
-        `, { maxWidth: 260 });
+        `, { maxWidth: Math.min(260, window.innerWidth - 60) });
 
         marker.placeData = place;
         marker.addTo(map);
@@ -424,6 +431,8 @@
     function flyToPlace(placeId) {
       const marker = allMarkers.find(m => m.placeData.id === placeId);
       if (!marker) return;
+      // P0-1: collapse bottom sheet so popup is visible
+      sheet.classList.remove('open');
       const p = marker.placeData;
       map.flyTo([p.lat, p.lng], 15, { animate: true, duration: 0.6 });
       setTimeout(() => marker.openPopup(), 650);

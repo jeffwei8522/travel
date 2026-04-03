@@ -127,6 +127,8 @@
       font-size: 0.9rem;
     }
     .itin-sheet .itin-item:last-child { border-bottom: none; }
+    .itin-sheet .itin-item[onclick] { transition: background 0.15s; border-radius: 6px; padding-left: 4px; }
+    .itin-sheet .itin-item[onclick]:hover, .itin-sheet .itin-item[onclick]:active { background: #fff0f5; }
     .itin-time { font-weight: bold; color: #888; min-width: 50px; }
 
     /* Popup styling */
@@ -215,37 +217,37 @@
 
     const DAY_ITINERARY = {
       1: [
-        { time: '14:00', text: '🚗 林口出發（國道1南下）' },
-        { time: '16:00', text: '📦 民雄交流道下 → 送草仔粿' },
+        { time: '14:00', text: '🚗 林口出發（國道1南下）', ref: 'hwu-linkou' },
+        { time: '16:00', text: '📦 民雄交流道下 → 送草仔粿', ref: 'minxiong-delivery' },
         { time: '16:30', text: '🚗 繼續南下' },
         { time: '17:15', text: '抵達台南' },
-        { time: '18:00', text: '🏨 Check-in 湖美' },
-        { time: '18:30', text: '🍔 丹丹漢堡晚餐' },
-        { time: '20:00', text: '🌙 大東夜市（週五）' }
+        { time: '18:00', text: '🏨 Check-in 湖美', ref: 'hwu-meei-motel' },
+        { time: '18:30', text: '🍔 丹丹漢堡晚餐', ref: 'dandan' },
+        { time: '20:00', text: '🌙 大東夜市（週五）', ref: 'dadong-night-market' }
       ],
       2: [
-        { time: '07:00', text: '🥩 牛肉湯早餐' },
-        { time: '08:30', text: '🐾 頑皮世界（車程 40 min・上午）' },
-        { time: '12:00', text: '🧂 七股鹽山（頑皮過去僅 15 min）' },
-        { time: '13:30', text: '🏜️ 頂頭額沙洲（車程 20 min）' },
-        { time: '15:30', text: '🏖️ 黃金海岸（車程 40 min）' },
-        { time: '17:00', text: '🌅 黃金海岸看日落' },
-        { time: '19:00', text: '🌙 花園夜市 or 武聖夜市（週六都有）' }
+        { time: '07:00', text: '🥩 牛肉湯早餐', ref: 'beef-soup' },
+        { time: '08:30', text: '🐾 頑皮世界（車程 40 min・上午）', ref: 'wanpi-world' },
+        { time: '12:00', text: '🧂 七股鹽山（頑皮過去僅 15 min）', ref: 'qigu-salt-mountain' },
+        { time: '13:30', text: '🏜️ 頂頭額沙洲（車程 20 min）', ref: 'dingtou-sandbar' },
+        { time: '15:30', text: '🏖️ 黃金海岸（車程 40 min）', ref: 'gold-coast' },
+        { time: '17:00', text: '🌅 黃金海岸看日落', ref: 'gold-coast' },
+        { time: '19:00', text: '🌙 花園夜市 or 武聖夜市（週六都有）', ref: 'garden-night-market' }
       ],
       3: [
-        { time: '08:00', text: '🥩 牛肉湯早餐' },
-        { time: '09:30', text: '👘 拍旗袍（孔廟/府中街，2~3hr）' },
+        { time: '08:00', text: '🥩 牛肉湯早餐', ref: 'beef-soup' },
+        { time: '09:30', text: '👘 拍旗袍（孔廟/府中街，2~3hr）', ref: 'qipao-photo' },
         { time: '12:30', text: '午餐' },
-        { time: '14:00', text: '🏝️ 漁光島散步' },
-        { time: '17:00', text: '🌅 觀夕平台 or 安平看夕陽' },
+        { time: '14:00', text: '🏝️ 漁光島散步', ref: 'yuguang-island' },
+        { time: '17:00', text: '🌅 觀夕平台 or 安平看夕陽', ref: 'sunset-platform' },
         { time: '19:00', text: '晚上隨意・市區小吃' }
       ],
       4: [
-        { time: '08:00', text: '🥩 最後一碗牛肉湯' },
-        { time: '10:00', text: '🍦 蜷尾家（正興街）' },
-        { time: '11:00', text: '🛍️ 桑原商店（又又美）' },
-        { time: '12:00', text: '🏨 Check-out 湖美' },
-        { time: '12:30', text: '☕ 文青咖啡廳・午餐' },
+        { time: '08:00', text: '🥩 最後一碗牛肉湯', ref: 'beef-soup' },
+        { time: '10:00', text: '🍦 蜷尾家（正興街）', ref: 'ninao' },
+        { time: '11:00', text: '🛍️ 桑原商店（又又美）', ref: 'sangwon-shop' },
+        { time: '12:00', text: '🏨 Check-out 湖美', ref: 'hwu-meei-motel' },
+        { time: '12:30', text: '☕ 文青咖啡廳・午餐', ref: 'cafe' },
         { time: '14:00', text: '🚗 悠閒北上' },
         { time: '17:30', text: '🏠 到新竹（Tue 下午才上班）' }
       ]
@@ -348,6 +350,20 @@
           zIndexOffset: isHotel ? 1000 : (isOrigin ? -100 : 0)
         });
 
+        const navLinks = `
+          <div style="margin-top:8px;display:flex;gap:6px;">
+            <a href="https://maps.apple.com/?daddr=${place.lat},${place.lng}&dirflg=d"
+               target="_blank" rel="noopener"
+               style="flex:1;text-align:center;padding:6px;background:#333;color:#fff;border-radius:8px;text-decoration:none;font-size:0.75rem;">
+              <i class="fa-solid fa-location-arrow"></i> Apple
+            </a>
+            <a href="https://www.google.com/maps/dir/?api=1&destination=${place.lat},${place.lng}&travelmode=driving"
+               target="_blank" rel="noopener"
+               style="flex:1;text-align:center;padding:6px;background:#4285f4;color:#fff;border-radius:8px;text-decoration:none;font-size:0.75rem;">
+              <i class="fa-solid fa-diamond-turn-right"></i> Google
+            </a>
+          </div>`;
+
         marker.bindPopup(`
           <div class="place-popup">
             <h3><i class="fa-solid fa-${place.icon}"></i> ${place.name}</h3>
@@ -355,6 +371,7 @@
             <span class="type-badge" style="background:${color}">${badge}</span>
             <div class="note">${place.note}</div>
             <div class="day-tags">${dayTags}</div>
+            ${navLinks}
           </div>
         `, { maxWidth: 260 });
 
@@ -403,6 +420,15 @@
       }
     }
 
+    // --- Fly to marker by place ID ---
+    function flyToPlace(placeId) {
+      const marker = allMarkers.find(m => m.placeData.id === placeId);
+      if (!marker) return;
+      const p = marker.placeData;
+      map.flyTo([p.lat, p.lng], 15, { animate: true, duration: 0.6 });
+      setTimeout(() => marker.openPopup(), 650);
+    }
+
     // --- Day filter ---
     const sheet = document.getElementById('itin-sheet');
     const sheetTitle = document.getElementById('sheet-title');
@@ -438,12 +464,15 @@
       if (day !== 'all' && DAY_ITINERARY[day]) {
         const items = DAY_ITINERARY[day];
         sheetTitle.innerHTML = `<span style="color:${DAY_COLORS[dayNum]}"><i class="fa-solid fa-route"></i> ${DAY_LABELS[dayNum]}</span>`;
-        sheetList.innerHTML = items.map(it => `
-          <div class="itin-item">
-            <span class="itin-time">${it.time}</span>
-            <span>${it.text}</span>
-          </div>
-        `).join('');
+        sheetList.innerHTML = items.map(it => {
+          const clickable = it.ref ? `onclick="flyToPlace('${it.ref}')" style="cursor:pointer;"` : '';
+          const arrow = it.ref ? ' <i class="fa-solid fa-location-dot" style="color:#d63384;font-size:0.7rem;"></i>' : '';
+          return `
+            <div class="itin-item" ${clickable}>
+              <span class="itin-time">${it.time}</span>
+              <span>${it.text}${arrow}</span>
+            </div>`;
+        }).join('');
         sheet.classList.add('open');
       } else {
         sheet.classList.remove('open');
